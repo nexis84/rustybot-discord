@@ -1,7 +1,7 @@
 {
   "name": "RustyBot Discord Market Bot",
   "description": "A Discord bot for EVE Online market data, manufacturing costs, and LP analysis",
-  "repository": "https://github.com/yourusername/rustybot-discord-market",
+  "repository": "https://github.com/nexis84/rustybot-discord",
   "logo": "",
   "keywords": ["discord", "bot", "eve-online", "market", "gaming"],
   "env": {
