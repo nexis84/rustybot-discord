@@ -2,6 +2,8 @@
 
 A Discord bot that provides real-time market data, manufacturing costs, and loyalty point analysis for EVE Online.
 
+**🚀 Live Repository**: https://github.com/nexis84/rustybot-discord
+
 ## Features
 
 - **Market Data**: Get real-time prices from all major trade hubs (Jita, Amarr, Dodixie, Hek, Rens)
