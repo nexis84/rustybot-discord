@@ -339,104 +339,70 @@ async function fetchMarketDataImproved(itemName, typeID, channel, quantity = 1) 
     }
 }
 
-// Function to fetch market data for an item in trade hubs
+// Function to fetch market data for an item in trade hubs (Improved with Embed)
 
 async function fetchMarketDataTradeHubs(itemName, typeID, channel, quantity = 1) {
+    const embed = new EmbedBuilder()
+        .setColor(0x0099ff)
+        .setTitle(`📊 Market Orders for "${itemName}"${quantity > 1 ? ` x${quantity}` : ''}`)
+        .setDescription('Real-time market prices from major trade hubs')
+        .setTimestamp();
 
-    const results = [];
+    let hasData = false;
 
     for (const [regionName, regionID] of Object.entries(tradeHubRegions)) {
-
         try {
-
             const sellOrdersURL = `https://esi.evetech.net/latest/markets/${regionID}/orders/?datasource=tranquility&order_type=sell&type_id=${typeID}`;
-
             const buyOrdersURL = `https://esi.evetech.net/latest/markets/${regionID}/orders/?datasource=tranquility&order_type=buy&type_id=${typeID}`;
 
-            
-
             const [sellOrdersRes, buyOrdersRes] = await Promise.all([
-
                 limiter.schedule(() => axios.get(sellOrdersURL, { headers: { 'User-Agent': USER_AGENT }, validateStatus: status => status >= 200 && status < 500 })),
-
                 limiter.schedule(() => axios.get(buyOrdersURL, { headers: { 'User-Agent': USER_AGENT }, validateStatus: status => status >= 200 && status < 500 }))
-
             ]);
 
-
-
             if (sellOrdersRes.status !== 200 || buyOrdersRes.status !== 200) {
-
                 console.error(`[fetchMarketDataTradeHubs] Error fetching data for "${itemName}" in region ${regionName}`);
-
                 continue;
-
             }
-
-
 
             const sellOrders = sellOrdersRes.data;
-
             const buyOrders = buyOrdersRes.data;
 
+            let sellPrice = 'No Sell Orders';
+            let buyPrice = 'No Buy Orders';
 
-
-            if (!sellOrders.length && !buyOrders.length) {
-
-                results.push(`❌ No market data found for "${itemName}" in ${regionName}. ❌`);
-
-                continue;
-
-            }
-
-
-
-            let sellPrice = 'N/A';
-
-            let buyPrice = 'N/A';
-
-
-
-            if (sellOrders.length > 0) {
-
+            if (Array.isArray(sellOrders) && sellOrders.length > 0) {
                 const lowestSellOrder = sellOrders.reduce((min, order) => (order.price < min.price ? order : min), sellOrders[0]);
-
                 sellPrice = parseFloat(lowestSellOrder.price * quantity).toLocaleString(undefined, { minimumFractionDigits: 2 });
-
             }
 
-
-
-            if (buyOrders.length > 0) {
-
+            if (Array.isArray(buyOrders) && buyOrders.length > 0) {
                 const highestBuyOrder = buyOrders.reduce((max, order) => (order.price > max.price ? order : max), buyOrders[0]);
-
                 buyPrice = parseFloat(highestBuyOrder.price * quantity).toLocaleString(undefined, { minimumFractionDigits: 2 });
-
             }
 
-
-
-            results.push(`**${regionName.toUpperCase()}:** Sell: ${sellPrice} ISK | Buy: ${buyPrice} ISK`);
-
+            // Only add field if there is actual data
+            if (sellPrice !== 'No Sell Orders' || buyPrice !== 'No Buy Orders') {
+                embed.addFields({ name: regionName.toUpperCase(), value: `Sell: ${sellPrice} ISK\nBuy: ${buyPrice} ISK`, inline: true });
+                hasData = true;
+            }
         } catch (error) {
-
-            console.error(`[fetchMarketDataTradeHubs] Error fetching market data for "${itemName}" in ${regionName}`);
-
+            console.error(`[fetchMarketDataTradeHubs] Error fetching market data for "${itemName}" in ${regionName}:`, error?.message || error);
+            // Optionally add a field to indicate an error for that region
+            embed.addFields({ name: regionName.toUpperCase(), value: 'Error fetching data', inline: true });
         }
-
     }
 
-    // Format the output with proper header and styling
-
-    const quantityText = quantity > 1 ? ` x${quantity}` : '';
-
-    const header = `📊 **Market Orders for "${itemName}"**${quantityText}`;
-
-    const formattedResults = results.map(result => `  ${result}`);
-
-    channel.send(`${header}\n${formattedResults.join('\n')}`);
-
+    if (hasData) {
+        try {
+            await channel.send({ embeds: [embed] });
+        } catch (sendError) {
+            console.error('[fetchMarketDataTradeHubs] Error sending embed:', sendError);
+            channel.send(`📊 Market Orders for "${itemName}" (summary):\n${embed.data.fields?.map(f => `**${f.name}**: ${f.value}`).join('\n')}`);
+        }
+    } else {
+        channel.send(`❌ No market data found for "${itemName}" in any trade hubs. ❌`);
+    }
 }
 // Handle interactions (buttons, select menus, and chat input commands)
 client.on('interactionCreate', async interaction => {
