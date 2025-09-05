@@ -8,7 +8,7 @@
    git add .
    git commit -m "Initial commit: RustyBot Discord Market Bot"
    git branch -M main
-   git remote add origin https://github.com/yourusername/rustybot-discord-market.git
+   git remote add origin https://github.com/nexis84/rustybot-discord-bot.git
    git push -u origin main
    ```
 
@@ -43,7 +43,7 @@
    - Click "New +" → "Web Service"
    - Connect your GitHub repository
    - Configure settings:
-     - **Name**: `rustybot-discord-market`
+     - **Name**: `rustybot-discord-bot`
      - **Environment**: Node
      - **Region**: Choose closest to your users
      - **Branch**: `main`

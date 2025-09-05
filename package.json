@@ -1,5 +1,5 @@
 {
-    "name": "rustybot-discord-market",
+    "name": "rustybot-discord-bot",
     "version": "1.0.0",
     "description": "RustyBot - EVE Online Discord Market Bot with real-time market data, manufacturing costs, and LP analysis",
     "main": "server.js",
@@ -7,8 +7,8 @@
     "scripts": {
         "start": "node server.js",
         "dev": "node --watch server.js",
-        "docker:build": "docker build -t rustybot-discord-market .",
-        "docker:run": "docker run --env-file .env -p 8080:8080 rustybot-discord-market",
+        "docker:build": "docker build -t rustybot-discord-bot .",
+        "docker:run": "docker run --env-file .env -p 8080:8080 rustybot-discord-bot",
         "test": "echo \"Error: no test specified\" && exit 1",
         "health": "curl -f http://localhost:8080/health || exit 1"
     },
@@ -26,12 +26,12 @@
     "license": "ISC",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/nexis84/rustybot-discord.git"
+        "url": "git+https://github.com/nexis84/rustybot-discord-bot.git"
     },
     "bugs": {
-        "url": "https://github.com/nexis84/rustybot-discord/issues"
+        "url": "https://github.com/nexis84/rustybot-discord-bot/issues"
     },
-    "homepage": "https://github.com/nexis84/rustybot-discord#readme",
+    "homepage": "https://github.com/nexis84/rustybot-discord-bot#readme",
     "engines": {
         "node": ">=16.0.0"
     },

@@ -10,8 +10,8 @@
 ### 2. Clone and Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/rustybot-discord-market.git
-cd rustybot-discord-market
+git clone https://github.com/nexis84/rustybot-discord-bot.git
+cd rustybot-discord-bot
 
 # Install dependencies
 npm install

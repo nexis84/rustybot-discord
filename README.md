@@ -2,7 +2,7 @@
 
 A Discord bot that provides real-time market data, manufacturing costs, and loyalty point analysis for EVE Online.
 
-**🚀 Live Repository**: https://github.com/nexis84/rustybot-discord
+**🚀 Live Repository**: https://github.com/nexis84/rustybot-discord-bot
 
 ## Features
 
@@ -49,8 +49,8 @@ USER_AGENT=YourBot/1.0.0 (your@email.com)
 
 1. Clone the repository:
 ```bash
-git clone <your-repo-url>
-cd discord-market-bot
+git clone https://github.com/nexis84/rustybot-discord-bot.git
+cd rustybot-discord-bot
 ```
 
 2. Install dependencies:
